@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  php-httpd:
+    image: php:7.4-apache
+    ports:
+      - 80:80
+    volumes:
+      - "/Users/tim/Projects/IE/adminapi:/var/www/html"
+    extra_hosts:
+      - "blackboxadmin.local:127.0.0.1"
+    hostname: blackboxadmin.local
+    domainname: local
+    ## Enable MySQLi with :    docker-php-ext-install mysqli
+    ## Enable mod_rewrite with :     a2enmod rewrite
+  mariadb:
+    image: mariadb
+    volumes:
+      - /Users/tim/Projects/IE/db/mariadb-volume:/var/lib/mysql
+    environment:
+      TZ: "SAST"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "BlackBox@123"
+      MYSQL_USER: 'dev'
+      MYSQL_PASSWORD: 'BlackBox@123'
+      MYSQL_DATABASE: 'blackbox'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - 'mariadb:db'
+    ports:
+      - 8081:80
+
+volumes:
+  mariadb-volume:
