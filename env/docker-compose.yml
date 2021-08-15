@@ -6,9 +6,9 @@ services:
     ports:
       - 80:80
     volumes:
-      - "/Users/tim/Projects/IE/adminapi:/var/www/html"
+      - "/Users/tim/Projects/IE/storeapi:/var/www/html"
     extra_hosts:
-      - "blackboxadmin.local:127.0.0.1"
+      - "blackbox.local:127.0.0.1"
     hostname: blackboxadmin.local
     domainname: local
     ## Enable MySQLi with :    docker-php-ext-install mysqli
