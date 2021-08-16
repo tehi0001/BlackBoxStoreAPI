@@ -34,6 +34,10 @@ $router->get("/products/by-category/:category", function ($request, $response) {
     require_once 'controllers/get_products.php';
 });
 
+$router->get("/products/:id", function ($request, $response) {
+    require_once 'controllers/get_product.php';
+});
+
 
 
 $router->get("**", function ($request, $response) {
