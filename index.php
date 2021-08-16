@@ -51,6 +51,10 @@ $router->get("**", function ($request, $response) {
 
 //POST
 
+$router->post("/get-cart-data", function ($request, $response) {
+    require_once 'controllers/get_cart_data.php';
+});
+
 $router->post("**", function ($request, $response) {
     $response->status(404)->send("404 Not Found");
 });
