@@ -4,10 +4,15 @@ $db = Utils::get_db_object();
 
 $category = $request->getParam("category");
 
+$new_arrivals_max = $request->getParam("new-arrivals-max");
+
 
 try {
     if(empty($category)) {
         $products = $db->select_many("SELECT * FROM products ORDER BY entrydate DESC");
+    }
+    else if(!empty($new_arrivals_max)) {
+        $products = $db->select_many("SELECT id, product_name, price, discount  FROM products ORDER BY entrydate DESC LIMIT ?", "i", array($new_arrivals_max));
     }
     else {
         $category = urldecode($category);
