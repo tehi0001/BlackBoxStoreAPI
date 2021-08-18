@@ -9,16 +9,16 @@ $new_arrivals_max = $request->getParam("new-arrivals-max");
 $post = $request->getBody();
 
 try {
-    if(!empty($post['query'])) {
+    if(!empty($post['query'])) { //Search products
         $products = $db->select_many("SELECT * FROM products WHERE product_name LIKE CONCAT('%',?,'%')", "s", array($post['query']));
     }
-    else if(empty($category)) {
+    else if(empty($category)) { //Get all products
         $products = $db->select_many("SELECT * FROM products ORDER BY entrydate DESC");
     }
-    else if(!empty($new_arrivals_max)) {
+    else if(!empty($new_arrivals_max)) { //Get new arrivals
         $products = $db->select_many("SELECT id, product_name, price, discount  FROM products ORDER BY entrydate DESC LIMIT ?", "i", array($new_arrivals_max));
     }
-    else {
+    else { //Get by categories
         $category = urldecode($category);
 
         $category_id = $db->select_one(
