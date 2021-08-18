@@ -6,17 +6,20 @@ $db = Utils::get_db_object();
 
 $post = $request->getBody();
 
+$billing = $post['order']['billing'];
+
+$shipping = $post['order']['shipping'];
+
 try {
     if(isset($headers['Authorization'])) {
         $user = Utils::get_user_from_session($response);
     }
     else {
-        $billing = $post['order']['billing'];
+
         $db->query(
-            "INSERT INTO `users` (email, firstname, lastname, phone, address, city, province, postcode) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            "ssssssss",
-            array($billing['email'], $billing['firstname'], $billing['lastname'], $billing['phone'], $billing['address'], $billing['city'], $billing['province'], $billing['postcode'])
+            "INSERT INTO users (email, firstname, lastname) VALUES (?, ?, ?)",
+            "sss",
+            array($billing['email'], $billing['firstname'], $billing['lastname'])
         );
 
         $stmt = $db->getStatementResult();
@@ -24,24 +27,40 @@ try {
         $user = $stmt->insert_id;
     }
 
-    $shipping = $post['order']['shipping'];
+    $db->query(
+        "INSERT INTO `billing_addresses` (`user`, `firstname`, `lastname`, `address`, `city`, `province`, `postcode`, `phone`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "isssssss",
+        array($user, $billing['firstname'], $billing['lastname'], $billing['address'], $billing['city'], $billing['province'], $billing['postcode'], $billing['phone'])
+    );
+
+    $stmt = $db->getStatementResult();
+
+    $billing_id = $stmt->insert_id;
+
+
+    $db->query(
+        "INSERT INTO `shipping_addresses` (`user`, `firstname`, `lastname`, `address`, `city`, `province`, `postcode`, `phone`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "isssssss",
+        array($user, $shipping['firstname'], $shipping['lastname'], $shipping['address'], $shipping['city'], $shipping['province'], $shipping['postcode'], $shipping['phone'])
+    );
+
+    $stmt = $db->getStatementResult();
+
+    $shipping_id = $stmt->insert_id;
+
+
 
     $order_number = time() + rand(0, 1000);
 
     $db->query(
-        "INSERT INTO orders (order_number, user, shipping_firstname, shipping_lastname, shipping_address, shipping_city, shipping_province, 
-                    shipping_postcode, shipping_phone, shipping_category, shipping_cost, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        "isssssssssdd",
+        "INSERT INTO `orders` (`user`, `order_number`, `billing_address`, `shipping_address`, `shipping_category`, `shipping_cost`, `total`)
+                VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "iiiiidd",
         array(
-            $order_number,
             $user,
-            $shipping['firstname'],
-            $shipping['lastname'],
-            $shipping['address'],
-            $shipping['city'],
-            $shipping['province'],
-            $shipping['postcode'],
-            $shipping['phone'],
+            $order_number,
+            $billing_id,
+            $shipping_id,
             $shipping['shippingCategory'],
             $shipping['shippingCost'],
             $post['order']['total']
@@ -60,7 +79,7 @@ try {
 
         if(isset($item['options'])) {
             foreach ($item['options'] as $index => $option ) {
-                $options .= $option['type'];
+                $options .= $option['name'] . ": " . $option['value'];
 
                 if($index < sizeof($item['options']) - 1) {
                     $options .= " | ";
@@ -68,12 +87,12 @@ try {
             }
         }
 
-        $product = $db->select_one("SELECT product_name, price FROM products WHERE id=?", "i", array($item['productId']));
+        $product = $db->select_one("SELECT price FROM products WHERE id=?", "i", array($item['productId']));
 
         $db->query(
-            "INSERT INTO order_items (order_id, product_name, quantity, unit_cost, total) VALUES (?, ?, ?, ?, ?)",
-            "isidd",
-            array($order_id, $product['product_name'], $item['quantity'], $product['price'], $item['quantity'] * $product['price'])
+            "INSERT INTO `order_items` (`order_id`, `product`, `quantity`, `unit_cost`, `total`, `options`) VALUES (?, ?, ?, ?, ?, ?)",
+            "iiidds",
+            array($order_id, $item['productId'], $item['quantity'], $product['price'], $item['quantity'] * $product['price'], $options)
         );
     }
 

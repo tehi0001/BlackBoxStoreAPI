@@ -63,8 +63,8 @@ $router->post("/checkout", function ($request, $response) {
     require_once 'controllers/checkout.php';
 });
 
-$router->post("/complete-order", function ($request, $response) {
-    require_once 'controllers/complete_order.php';
+$router->post("/update-order", function ($request, $response) {
+    require_once 'controllers/update_order.php';
 });
 
 $router->post("**", function ($request, $response) {
