@@ -71,6 +71,10 @@ $router->post("/register", function ($request, $response) {
     require_once 'controllers/register.php';
 });
 
+$router->post("/auth", function ($request, $response) {
+    require_once 'controllers/auth.php';
+});
+
 $router->post("**", function ($request, $response) {
     $response->status(404)->send("404 Not Found");
 });
