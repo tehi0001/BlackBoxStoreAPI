@@ -55,6 +55,10 @@ $router->get("**", function ($request, $response) {
 
 //POST
 
+$router->post("/search-products", function ($request, $response) {
+    require_once 'controllers/get_products.php';
+});
+
 $router->post("/get-cart-data", function ($request, $response) {
     require_once 'controllers/get_cart_data.php';
 });

@@ -6,9 +6,13 @@ $category = $request->getParam("category");
 
 $new_arrivals_max = $request->getParam("new-arrivals-max");
 
+$post = $request->getBody();
 
 try {
-    if(empty($category)) {
+    if(!empty($post['query'])) {
+        $products = $db->select_many("SELECT * FROM products WHERE product_name LIKE CONCAT('%',?,'%')", "s", array($post['query']));
+    }
+    else if(empty($category)) {
         $products = $db->select_many("SELECT * FROM products ORDER BY entrydate DESC");
     }
     else if(!empty($new_arrivals_max)) {
