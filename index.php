@@ -67,6 +67,10 @@ $router->post("/update-order", function ($request, $response) {
     require_once 'controllers/update_order.php';
 });
 
+$router->post("/register", function ($request, $response) {
+    require_once 'controllers/register.php';
+});
+
 $router->post("**", function ($request, $response) {
     $response->status(404)->send("404 Not Found");
 });
