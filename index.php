@@ -42,6 +42,10 @@ $router->get("/products/:id", function ($request, $response) {
     require_once 'controllers/get_product.php';
 });
 
+$router->get("/shipping-costs", function ($request, $response) {
+    require_once 'controllers/get_shipping_costs.php';
+});
+
 
 
 $router->get("**", function ($request, $response) {
@@ -53,6 +57,14 @@ $router->get("**", function ($request, $response) {
 
 $router->post("/get-cart-data", function ($request, $response) {
     require_once 'controllers/get_cart_data.php';
+});
+
+$router->post("/checkout", function ($request, $response) {
+    require_once 'controllers/checkout.php';
+});
+
+$router->post("/complete-order", function ($request, $response) {
+    require_once 'controllers/complete_order.php';
 });
 
 $router->post("**", function ($request, $response) {
