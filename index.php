@@ -46,6 +46,17 @@ $router->get("/shipping-costs", function ($request, $response) {
     require_once 'controllers/get_shipping_costs.php';
 });
 
+$router->get("/promotions", function ($request, $response) {
+    require_once 'controllers/get_promotions.php';
+});
+
+$router->get("/get-orders", function ($request, $response) {
+    require_once 'controllers/get_orders.php';
+});
+
+$router->get("/view-order/:id", function ($request, $response) {
+    require_once 'controllers/view_order.php';
+});
 
 
 $router->get("**", function ($request, $response) {

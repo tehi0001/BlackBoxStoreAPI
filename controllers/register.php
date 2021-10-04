@@ -13,7 +13,7 @@ if(!empty($exist)) {
     ));
 }
 else {
-    $db->query(
+    $insert = $db->query(
         "INSERT INTO `users` (`email`, `password`, `firstname`, `lastname`, `status`, `is_registered`) VALUES (?, ?, ?, ?, ?, ?)",
         "ssssii",
         array(
@@ -25,6 +25,8 @@ else {
             1
         )
     );
+
+    var_dump($insert);
 
     $response->json(array(
         "success" => true

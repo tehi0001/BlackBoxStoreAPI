@@ -5,7 +5,7 @@ $db = Utils::get_db_object();
 $post = $request->getBody();
 
 $user = $db->select_one(
-    "SELECT password, firstname, lastname, status FROM users WHERE email=? AND is_registered=?",
+    "SELECT id, password, firstname, lastname, status FROM users WHERE email=? AND is_registered=?",
     "si",
     array($post['email'], 1)
 );
@@ -26,7 +26,7 @@ else {
     $response->json(array(
         "success" => true,
         "token" => Utils::generate_session_token(array(
-            "user" => $post['email']
+            "user" => $user['id']
         )),
         "data" => array(
             "firstname" => $user['firstname'],

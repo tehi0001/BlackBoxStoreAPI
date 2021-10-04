@@ -12,11 +12,7 @@ $shipping = $post['order']['shipping'];
 
 try {
     if(isset($headers['Authorization'])) {
-        $user_email = Utils::get_user_from_session($response);
-
-        $user_info = $db->select_one("SELECT id FROM users WHERE email=? AND is_registered=?", "si", array($user_email, 1));
-
-        $user = $user_info['id'];
+        $user = Utils::get_user_from_session($response);
     }
     else {
 
