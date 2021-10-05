@@ -35,6 +35,15 @@ try {
 
     $product['shipping'] = $db->select_many("SELECT * FROM shipping_categories ORDER BY cost ASC");
 
+    $product['reviews'] = $db->select_many(
+        "SELECT product_reviews.*, users.firstname, users.lastname FROM product_reviews, users WHERE product_reviews.user = users.id AND product_reviews.product=?",
+        "i",
+        array($id)
+    );
+
+    $average = $db->select_one("SELECT AVG(rating) AS average FROM product_reviews WHERE product=?", "i", array($id));
+    $product['average_rating'] = $average['average'];
+
     $response->json(array(
         "success" => true,
         "data" => $product

@@ -5,7 +5,7 @@ $db = Utils::get_db_object();
 
 try {
     $order = $db->select_one(
-        "SELECT * FROM orders INNER JOIN shipping_categories ON orders.shipping_category = shipping_categories.id WHERE orders.id=?",
+        "SELECT orders.*, shipping_categories.category_name FROM orders, shipping_categories WHERE orders.shipping_category = shipping_categories.id AND orders.id=?",
         "i",
         array($request->getParam("id"))
     );

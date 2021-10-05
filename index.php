@@ -90,6 +90,10 @@ $router->post("/auth", function ($request, $response) {
     require_once 'controllers/auth.php';
 });
 
+$router->post("/review-product/:product_id", function ($request, $response) {
+    require_once 'controllers/review_product.php';
+});
+
 $router->post("**", function ($request, $response) {
     $response->status(404)->send("404 Not Found");
 });
