@@ -1,18 +1,27 @@
 version: '3'
 
 services:
-  php-httpd:
+  storeapi:
     image: php:7.4-apache
     ports:
-      - 80:80
+      - 8000:80
     volumes:
       - "/Users/tim/Projects/IE/storeapi:/var/www/html"
     extra_hosts:
       - "blackbox.local:127.0.0.1"
     hostname: blackboxadmin.local
     domainname: local
-    ## Enable MySQLi with :    docker-php-ext-install mysqli
-    ## Enable mod_rewrite with :     a2enmod rewrite
+  adminapi:
+    image: php:7.4-apache
+    ports:
+      - 8100:80
+    volumes:
+      - "/Users/tim/Projects/IE/adminapi:/var/www/html"
+    extra_hosts:
+      - "blackbox.local:127.0.0.1"
+    hostname: blackboxadmin.local
+    domainname: local
+    #command:    docker-php-ext-install mysqli && a2enmod rewrite
   mariadb:
     image: mariadb
     volumes:

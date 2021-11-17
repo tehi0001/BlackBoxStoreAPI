@@ -36,7 +36,7 @@ try {
     $product['shipping'] = $db->select_many("SELECT * FROM shipping_categories ORDER BY cost ASC");
 
     $product['reviews'] = $db->select_many(
-        "SELECT product_reviews.*, users.firstname, users.lastname FROM product_reviews, users WHERE product_reviews.user = users.id AND product_reviews.product=?",
+        "SELECT product_reviews.*, users.firstname, users.lastname FROM product_reviews, users WHERE product_reviews.user = users.id AND product_reviews.product=? ORDER BY product_reviews.entrydate DESC",
         "i",
         array($id)
     );
